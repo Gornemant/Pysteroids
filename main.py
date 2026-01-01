@@ -5,8 +5,8 @@ from logger import log_state
 def main():
 	pygame.init()
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    #print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
-    #print(f"Screen width: {SCREEN_WIDTH} \nScreen height: {SCREEN_HEIGHT}")
+	clock = pygame.time.Clock() #pygame object to track time
+	dt = 0
 	while True:
 		log_state()
 		for event in pygame.event.get():
@@ -14,6 +14,8 @@ def main():
 				return
 		screen.fill("black")
 		pygame.display.flip()
+		dt = clock.tick() / 1000 #returns time passed since last tick in seconds
+		clock.tick(MAX_FPS) #limits the maximum FPS to the set constant
 
 
 if __name__ == "__main__":
