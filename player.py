@@ -1,5 +1,5 @@
 import pygame
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
 from circleshape import CircleShape
 
 
@@ -34,4 +34,14 @@ class Player(CircleShape):
 			self.rotate(-dt)
 		if keys[self.keybind_right] and not keys[self.keybind_left]:
 			self.rotate(dt)
+		if keys[self.keybind_up] and not keys[self.keybind_down]:
+			self.move(dt)
+		if keys[self.keybind_down] and not keys[self.keybind_up]:
+			self.move(-dt)
     
+	def move(self, dt):
+		#Unit vector code provided in Boot.dev lesson
+		unit_vector = pygame.Vector2(0, 1)
+		rotated_vector = unit_vector.rotate(self.rotation)
+		rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
+		self.position += rotated_with_speed_vector
