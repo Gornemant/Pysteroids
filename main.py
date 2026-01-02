@@ -9,6 +9,9 @@ def main():
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	clock = pygame.time.Clock() #pygame object to track time
 	dt = 0
+	updatable = pygame.sprite.Group()
+	drawable = pygame.sprite.Group()
+	Player.containers = (updatable, drawable)
 	player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
 	
 	while True:
@@ -17,8 +20,9 @@ def main():
 			if event.type == pygame.QUIT:
 				return
 		screen.fill("black")
-		player.update(dt)
-		player.draw(screen)
+		updatable.update(dt)
+		for i in drawable:
+			i.draw(screen)
 		pygame.display.flip()
 		dt = clock.tick() / 1000 #returns time passed since last tick in seconds
 		clock.tick(MAX_FPS) #limits the maximum FPS to the set constant
