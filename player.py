@@ -1,5 +1,5 @@
 import pygame
-from constants import PLAYER_RADIUS, LINE_WIDTH
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED
 from circleshape import CircleShape
 
 
@@ -7,6 +7,11 @@ class Player(CircleShape):
 	def __init__(self, x, y):
 		super().__init__(x,y,PLAYER_RADIUS)
 		self.rotation = 0
+		#Keybindings added beyond scope for easier custom keybinds at later point
+		self.keybind_up = pygame.K_UP
+		self.keybind_down = pygame.K_DOWN
+		self.keybind_left = pygame.K_LEFT
+		self.keybind_right = pygame.K_RIGHT
 	
 	# triangle method provided by Boot.dev in the course
 	def triangle(self):
@@ -20,3 +25,13 @@ class Player(CircleShape):
 	def draw(self, screen):
 		pygame.draw.polygon(screen, "white", self.triangle(), LINE_WIDTH)
 	
+	def rotate(self, dt):
+		self.rotation += PLAYER_TURN_SPEED * dt
+	
+	def update(self, dt):
+		keys = pygame.key.get_pressed()
+		if keys[self.keybind_left] and not keys[self.keybind_right]:
+			self.rotate(-dt)
+		if keys[self.keybind_right] and not keys[self.keybind_left]:
+			self.rotate(dt)
+    
