@@ -7,6 +7,7 @@ class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x,y,PLAYER_RADIUS)
         self.rotation = 0
+        self.shot_cooldown_timer = 0
         #Keybindings added beyond scope for easier custom keybinds at later point
         self.keybind_up = pygame.K_UP
         self.keybind_down = pygame.K_DOWN
@@ -39,12 +40,16 @@ class Player(CircleShape):
             self.move(dt)
         if keys[self.keybind_down] and not keys[self.keybind_up]:
             self.move(-dt)
-        if keys[self.keybind_shoot] and keys[self.keybind_up] and not keys[self.keybind_down]:
-            self.shoot(1)
-        if keys[self.keybind_shoot] and keys[self.keybind_down] and not keys[self.keybind_up]:
-            self.shoot(-1)
-        if keys[self.keybind_shoot] and not (keys[self.keybind_up] or keys[self.keybind_down]):
-            self.shoot(0)
+        if self.shot_cooldown_timer > 0:
+            self.shot_cooldown_timer -= dt
+        else:
+            if keys[self.keybind_shoot] and keys[self.keybind_up] and not keys[self.keybind_down]:
+                self.shoot(1)
+            if keys[self.keybind_shoot] and keys[self.keybind_down] and not keys[self.keybind_up]:
+                self.shoot(-1)
+            if keys[self.keybind_shoot] and not (keys[self.keybind_up] or keys[self.keybind_down]):
+                self.shoot(0)
+            self.shot_cooldown_timer = PLAYER_SHOOT_COOLDOWN_SECONDS
     
     def move(self, dt):
         #Unit vector code provided in Boot.dev course
