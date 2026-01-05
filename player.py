@@ -49,7 +49,6 @@ class Player(CircleShape):
                 self.shoot(-1)
             if keys[self.keybind_shoot] and not (keys[self.keybind_up] or keys[self.keybind_down]):
                 self.shoot(0)
-            self.shot_cooldown_timer = PLAYER_SHOOT_COOLDOWN_SECONDS
     
     def move(self, dt):
         #Unit vector code provided in Boot.dev course
@@ -66,4 +65,5 @@ class Player(CircleShape):
         shot = Shot(*ship_front)
         rotated_vector = pygame.Vector2(0, 1).rotate(self.rotation)
         shot.velocity = rotated_vector * (PLAYER_SHOOT_SPEED + direction * PLAYER_SPEED)
+        self.shot_cooldown_timer = PLAYER_SHOOT_COOLDOWN_SECONDS
     
