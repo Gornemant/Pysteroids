@@ -24,12 +24,15 @@ class Player(CircleShape):
         c = self.position - forward * self.radius + right
         return [a, b, c]
     
+    #draw player ship
     def draw(self, screen):
         pygame.draw.polygon(screen, "white", self.triangle(), LINE_WIDTH)
     
+    #rotates the ship in relation to turn speed and time since last tick
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
     
+    #updates the sjip according to what keys are pressed, simultaneous opposite directions are ignored instead of cancelling each other out
     def update(self, dt):
         keys = pygame.key.get_pressed()
         if keys[self.keybind_left] and not keys[self.keybind_right]:
@@ -40,9 +43,12 @@ class Player(CircleShape):
             self.move(dt)
         if keys[self.keybind_down] and not keys[self.keybind_up]:
             self.move(-dt)
+        #cooldown timer between shots
         if self.shot_cooldown_timer > 0:
             self.shot_cooldown_timer -= dt
         else:
+            #ship forward/backwards velocity impacts shot speed, considered alternative was to handle it through ship velocity variable
+            #but would require a velocity update every tick or when movement key is released which is not yet required.
             if keys[self.keybind_shoot] and keys[self.keybind_up] and not keys[self.keybind_down]:
                 self.shoot(1)
             if keys[self.keybind_shoot] and keys[self.keybind_down] and not keys[self.keybind_up]:
@@ -59,7 +65,7 @@ class Player(CircleShape):
         #This basically does the same in one line
         self.position += pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SPEED * dt
     
-    #Ch4 L3: Shooting
+    #Ch4 L3: Shooting, direction input beyond scope for ship speed to impact shot velocity.
     def shoot(self, direction):
         ship_front = self.triangle()[0]
         shot = Shot(*ship_front)

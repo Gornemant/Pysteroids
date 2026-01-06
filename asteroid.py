@@ -14,6 +14,7 @@ class Asteroid(CircleShape):
     def update(self, dt):
         self.position += (self.velocity * dt)
     
+    #handles destroyed asteroid removal and splitting if applicable
     def split(self, asteroid_field):
         log_event("asteroid_shot")
         self.kill()
